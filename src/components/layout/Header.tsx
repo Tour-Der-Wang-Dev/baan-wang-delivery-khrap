@@ -1,11 +1,33 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+    };
+
+    checkUser();
+
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setIsLoggedIn(!!session);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-thai-background border-b border-thai-accent py-4 px-4 md:px-6">
@@ -51,7 +73,7 @@ const Header = () => {
             </Button>
           </Link>
           
-          <Link to="/account" className="hidden sm:block">
+          <Link to={isLoggedIn ? "/account" : "/login"}>
             <Button variant="outline" size="icon">
               <User size={20} />
             </Button>
@@ -102,11 +124,11 @@ const Header = () => {
               ช่วยเหลือ
             </Link>
             <Link 
-              to="/account" 
+              to={isLoggedIn ? "/account" : "/login"}
               className="p-2 hover:bg-thai-highlight rounded-md"
               onClick={() => setIsMenuOpen(false)}
             >
-              บัญชีของฉัน
+              {isLoggedIn ? "บัญชีของฉัน" : "เข้าสู่ระบบ"}
             </Link>
           </nav>
         </div>
