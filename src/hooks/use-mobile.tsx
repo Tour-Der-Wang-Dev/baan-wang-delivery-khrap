@@ -1,19 +1,41 @@
+
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 640 // Changed from 768px to 640px (sm breakpoint in Tailwind)
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = React.useState<boolean | null>(null)
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
+    // Function to check if device is mobile
+    const checkMobile = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
-    mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
+    
+    // Initial check
+    checkMobile()
+    
+    // Add event listener for window resize
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    
+    // Use the appropriate event listener method
+    if (mql.addEventListener) {
+      mql.addEventListener("change", checkMobile)
+    } else {
+      // For older browsers
+      window.addEventListener('resize', checkMobile)
+    }
+    
+    // Cleanup
+    return () => {
+      if (mql.removeEventListener) {
+        mql.removeEventListener("change", checkMobile)
+      } else {
+        window.removeEventListener('resize', checkMobile)
+      }
+    }
   }, [])
 
-  return !!isMobile
+  // Default to false if we don't know yet, to prevent layout shifts
+  return isMobile === null ? false : isMobile
 }

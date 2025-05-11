@@ -75,28 +75,59 @@
     @apply border-border;
   }
   body {
-    @apply bg-thai-background text-foreground font-sarabun;
+    @apply bg-thai-background text-foreground font-sarabun text-[15px] md:text-[16px];
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-noto-thai font-semibold;
+  }
+  
+  /* Optimize for touch */
+  button, a, input, select, textarea {
+    @apply touch-manipulation;
+  }
+  
+  /* Prevent text size adjustment on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 }
 
 /* Custom utility classes for app */
 @layer components {
   .thai-container {
-    @apply bg-thai-container rounded-lg p-4 shadow-sm;
+    @apply bg-thai-container rounded-lg p-3 sm:p-4 shadow-sm;
   }
   .restaurant-card {
-    @apply thai-container transition-transform hover:scale-[1.02] cursor-pointer;
+    @apply thai-container transition-transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer;
   }
   .food-card {
-    @apply thai-container flex items-center gap-3 p-3;
+    @apply thai-container flex items-center gap-2 sm:gap-3 p-2 sm:p-3;
   }
   .thai-button {
-    @apply bg-thai-highlight hover:bg-thai-accent text-foreground font-medium py-3 px-6 rounded-lg transition-colors;
+    @apply bg-thai-highlight hover:bg-thai-accent text-foreground font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors;
   }
   .thai-button-secondary {
-    @apply bg-thai-container hover:bg-thai-textArea text-foreground font-medium py-3 px-6 rounded-lg transition-colors border border-thai-highlight;
+    @apply bg-thai-container hover:bg-thai-textArea text-foreground font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors border border-thai-highlight;
+  }
+}
+
+/* Mobile optimizations */
+@layer utilities {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* Utility classes for safe areas on mobile */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
   }
 }

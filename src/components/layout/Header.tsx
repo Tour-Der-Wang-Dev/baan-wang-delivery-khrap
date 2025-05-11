@@ -29,15 +29,30 @@ const Header = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    if (isMenuOpen) {
+      const handleClickOutside = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest('[data-mobile-menu]') && !target.closest('[data-mobile-button]')) {
+          setIsMenuOpen(false);
+        }
+      };
+
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [isMenuOpen]);
+
   return (
-    <header className="sticky top-0 z-50 bg-thai-background border-b border-thai-accent py-4 px-4 md:px-6">
+    <header className="sticky top-0 z-50 bg-thai-background border-b border-thai-accent py-3 sm:py-4 px-3 sm:px-6">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo and site title */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="bg-thai-highlight rounded-full p-2">
-            <ShoppingBag size={24} className="text-foreground" />
+          <div className="bg-thai-highlight rounded-full p-1.5 sm:p-2">
+            <ShoppingBag size={20} className="text-foreground" />
           </div>
-          <h1 className="text-xl font-bold hidden sm:block">
+          <h1 className="text-lg sm:text-xl font-bold hidden sm:block">
             ที่นี่<span className="text-thai-accent">วังสามหมอ</span>
           </h1>
         </Link>
@@ -59,23 +74,23 @@ const Header = () => {
         </nav>
 
         {/* Right section - search, cart, account */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Button variant="outline" size="icon" className="hidden sm:flex">
-            <Search size={20} />
+            <Search size={18} />
           </Button>
           
           <Link to="/cart">
-            <Button variant="outline" size="icon" className="relative">
-              <ShoppingBag size={20} />
-              <span className="absolute -top-1 -right-1 bg-thai-accent text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <Button variant="outline" size="icon" className="relative h-8 w-8 sm:h-9 sm:w-9">
+              <ShoppingBag size={18} />
+              <span className="absolute -top-1 -right-1 bg-thai-accent text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                 2
               </span>
             </Button>
           </Link>
           
           <Link to={isLoggedIn ? "/account" : "/login"}>
-            <Button variant="outline" size="icon">
-              <User size={20} />
+            <Button variant="outline" size="icon" className="h-8 w-8 sm:h-9 sm:w-9">
+              <User size={18} />
             </Button>
           </Link>
           
@@ -83,18 +98,22 @@ const Header = () => {
           <Button 
             variant="outline" 
             size="icon" 
-            className="md:hidden"
+            className="md:hidden h-8 w-8 sm:h-9 sm:w-9"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            data-mobile-button
           >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </Button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-thai-container p-4 shadow-lg animate-fade-in">
-          <nav className="flex flex-col space-y-4">
+        <div 
+          className="md:hidden absolute top-full left-0 right-0 bg-thai-container p-3 sm:p-4 shadow-lg animate-fade-in"
+          data-mobile-menu
+        >
+          <nav className="flex flex-col space-y-2">
             <Link 
               to="/" 
               className="p-2 hover:bg-thai-highlight rounded-md" 

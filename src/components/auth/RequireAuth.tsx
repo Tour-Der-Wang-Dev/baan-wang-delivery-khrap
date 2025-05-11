@@ -9,9 +9,11 @@ const RequireAuth = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="h-8 w-8 animate-spin text-thai-highlight" />
-        <span className="ml-2 text-lg">กำลังโหลด...</span>
+      <div className="flex items-center justify-center h-[50vh] sm:h-screen">
+        <div className="text-center">
+          <Loader className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-thai-highlight mx-auto" />
+          <span className="block mt-2 text-base sm:text-lg">กำลังโหลด...</span>
+        </div>
       </div>
     );
   }
