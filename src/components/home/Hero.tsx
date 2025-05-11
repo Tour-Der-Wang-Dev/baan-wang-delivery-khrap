@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <div className="relative bg-thai-container rounded-xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-thai-highlight/80 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-thai-highlight/80 to-transparent" aria-hidden="true"></div>
       
       <div className="relative py-12 px-6 md:py-20 md:px-10 max-w-3xl">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
@@ -19,12 +19,12 @@ const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4">
-          <Link to="/restaurants">
+          <Link to="/restaurants" aria-label="สั่งอาหารเลย">
             <Button className="thai-button w-full sm:w-auto text-base">
               สั่งอาหารเลย
             </Button>
           </Link>
-          <Link to="/become-partner">
+          <Link to="/become-partner" aria-label="ร่วมเป็นพาร์ทเนอร์">
             <Button variant="outline" className="thai-button-secondary w-full sm:w-auto text-base">
               ร่วมเป็นพาร์ทเนอร์
             </Button>

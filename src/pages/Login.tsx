@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, User } from "lucide-react";
 import MainLayout from "@/layouts/MainLayout";
 import { useAuth } from "@/contexts/AuthContext";
+import SEO from "@/components/seo/SEO";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -60,6 +61,11 @@ const Login = () => {
 
   return (
     <MainLayout>
+      <SEO 
+        title="เข้าสู่ระบบ" 
+        description="เข้าสู่ระบบที่นี่วังสามหมอ เพื่อสั่งอาหารออนไลน์จากร้านอาหารท้องถิ่นในวังสามหมอ"
+        canonicalUrl="https://thineewangsammo.com/login"
+      />
       <div className="max-w-md mx-auto py-8 px-4">
         <div className="mb-8 text-center">
           <div className="w-16 h-16 bg-thai-highlight rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -94,6 +100,7 @@ const Login = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="อีเมลของคุณ"
                     required
+                    aria-label="อีเมลสำหรับเข้าสู่ระบบ"
                   />
                 </div>
 
@@ -106,6 +113,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="รหัสผ่านของคุณ"
                     required
+                    aria-label="รหัสผ่านสำหรับเข้าสู่ระบบ"
                   />
                 </div>
 

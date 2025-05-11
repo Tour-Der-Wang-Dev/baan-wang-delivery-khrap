@@ -27,8 +27,9 @@ const RestaurantCard = ({
         <div className="aspect-video overflow-hidden rounded-lg mb-3">
           <img
             src={image}
-            alt={name}
+            alt={`ร้านอาหาร ${name} ประเภทอาหาร ${cuisine} ในวังสามหมอ`}
             className="w-full h-full object-cover transition-transform hover:scale-105"
+            loading="lazy"
           />
         </div>
         
@@ -36,7 +37,7 @@ const RestaurantCard = ({
           <div className="flex justify-between items-start">
             <h3 className="font-bold text-lg">{name}</h3>
             <div className="flex items-center bg-thai-highlight px-2 py-1 rounded-md">
-              <Star size={16} className="text-yellow-500" />
+              <Star size={16} className="text-yellow-500" aria-hidden="true" />
               <span className="ml-1 text-sm font-semibold">{rating}</span>
             </div>
           </div>

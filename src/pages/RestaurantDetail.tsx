@@ -6,6 +6,7 @@ import RestaurantMenu from "@/components/restaurants/RestaurantMenu";
 import { Star, MapPin, Clock, PhoneCall, Info, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import SEO from "@/components/seo/SEO";
 
 const RestaurantDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,8 +30,69 @@ const RestaurantDetail = () => {
     phone: "099-999-9999",
   };
 
+  // Restaurant structured data for JSON-LD
+  const restaurantStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": restaurant.name,
+    "image": restaurant.coverImage,
+    "logo": restaurant.logo,
+    "@id": `https://thineewangsammo.com/restaurant/${restaurant.id}`,
+    "url": `https://thineewangsammo.com/restaurant/${restaurant.id}`,
+    "telephone": restaurant.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": restaurant.address.split(",")[0],
+      "addressLocality": "วังสามหมอ",
+      "addressRegion": "อุดรธานี",
+      "postalCode": "41280",
+      "addressCountry": "TH"
+    },
+    "description": restaurant.description,
+    "servesCuisine": restaurant.cuisine,
+    "priceRange": "฿฿",
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+      ],
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": restaurant.rating,
+      "reviewCount": restaurant.reviewCount
+    },
+    "potentialAction": {
+      "@type": "OrderAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `https://thineewangsammo.com/restaurant/${restaurant.id}`,
+        "inLanguage": "th",
+        "actionPlatform": [
+          "http://schema.org/DesktopWebPlatform",
+          "http://schema.org/IOSPlatform",
+          "http://schema.org/AndroidPlatform"
+        ]
+      },
+      "deliveryMethod": [
+        "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
+      ]
+    }
+  };
+
   return (
     <MainLayout>
+      <SEO 
+        title={restaurant.name}
+        description={`${restaurant.name} - ${restaurant.description} ${restaurant.cuisine} เวลาเปิด ${restaurant.openingHours}`}
+        canonicalUrl={`https://thineewangsammo.com/restaurant/${restaurant.id}`}
+        ogType="restaurant"
+        ogImage={restaurant.coverImage}
+        structuredData={restaurantStructuredData}
+      />
+      
       <Link to="/" className="flex items-center gap-2 mb-4 text-muted-foreground hover:text-foreground">
         <ArrowLeft size={16} />
         <span>กลับไปหน้าหลัก</span>
@@ -40,7 +102,7 @@ const RestaurantDetail = () => {
       <div className="relative h-48 md:h-64 rounded-xl overflow-hidden mb-6">
         <img
           src={restaurant.coverImage}
-          alt={restaurant.name}
+          alt={`หน้าร้าน ${restaurant.name} ร้านอาหาร${restaurant.cuisine}ในวังสามหมอ`}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -52,7 +114,7 @@ const RestaurantDetail = () => {
           <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
             <img
               src={restaurant.logo}
-              alt={`${restaurant.name} logo`}
+              alt={`โลโก้ร้าน ${restaurant.name}`}
               className="w-full h-full object-cover"
             />
           </div>

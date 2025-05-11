@@ -6,10 +6,37 @@ import RestaurantList from "@/components/restaurants/RestaurantList";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "@/components/seo/SEO";
 
 const Index = () => {
+  // Organization structured data for JSON-LD
+  const organizationStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ที่นี่วังสามหมอ",
+    "url": "https://thineewangsammo.com",
+    "logo": "https://thineewangsammo.com/logo.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+66-99-999-9999",
+      "contactType": "customer service",
+      "availableLanguage": ["Thai", "English"]
+    },
+    "sameAs": [
+      "https://www.facebook.com/thineewangsammo",
+      "https://www.instagram.com/thineewangsammo",
+      "https://twitter.com/thineewangsammo"
+    ]
+  };
+
   return (
     <MainLayout>
+      <SEO 
+        title="หน้าแรก" 
+        description="บริการส่งอาหารจากร้านอาหารท้องถิ่นในวังสามหมอ จัดส่งรวดเร็ว อาหารร้อน อร่อย จากร้านอาหารในชุมชน"
+        structuredData={organizationStructuredData}
+        canonicalUrl="https://thineewangsammo.com/"
+      />
       <div className="space-y-12">
         <Hero />
         
