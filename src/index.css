@@ -76,6 +76,8 @@
   }
   body {
     @apply bg-thai-background text-foreground font-sarabun text-[15px] md:text-[16px];
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile devices */
+    overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile */
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-noto-thai font-semibold;
@@ -84,11 +86,19 @@
   /* Optimize for touch */
   button, a, input, select, textarea {
     @apply touch-manipulation;
+    min-height: 44px; /* Minimum touch target size */
   }
   
   /* Prevent text size adjustment on orientation change */
   html {
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* Improve form element display on mobile */
+  input, select, textarea {
+    @apply appearance-none;
+    font-size: 16px; /* Prevent zoom on focus in iOS */
   }
 }
 
@@ -119,15 +129,26 @@
   
   /* Utility classes for safe areas on mobile */
   .safe-top {
-    padding-top: env(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top, 0px);
   }
   .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .safe-left {
-    padding-left: env(safe-area-inset-left);
+    padding-left: env(safe-area-inset-left, 0px);
   }
   .safe-right {
-    padding-right: env(safe-area-inset-right);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  
+  /* Prevent overscrolling on iOS */
+  .no-overscroll {
+    overscroll-behavior: none;
+  }
+  
+  /* Improve scrolling smoothness */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }

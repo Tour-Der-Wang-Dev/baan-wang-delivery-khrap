@@ -29,7 +29,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnReconnect: true,
-      cacheTime: 1000 * 60 * 30, // 30 minutes
+      gcTime: 1000 * 60 * 30, // 30 minutes (Updated from cacheTime which is deprecated)
     },
   }
 });
@@ -42,10 +42,10 @@ const App = () => {
     if (!viewportMeta) {
       const meta = document.createElement('meta');
       meta.name = 'viewport';
-      meta.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0';
+      meta.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0');
       document.head.appendChild(meta);
-    } else if (!viewportMeta.content.includes('viewport-fit=cover')) {
-      viewportMeta.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0';
+    } else if (viewportMeta instanceof HTMLMetaElement && !viewportMeta.content.includes('viewport-fit=cover')) {
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0');
     }
   }, []);
 

@@ -13,7 +13,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <HelmetProvider>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-grow container mx-auto px-3 py-4 sm:px-4 sm:py-6">
+        <main className="flex-grow container mx-auto px-3 py-4 sm:px-4 sm:py-6 safe-top safe-bottom">
           {children}
         </main>
         <Footer />
