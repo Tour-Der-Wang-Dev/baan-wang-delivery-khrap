@@ -61,19 +61,30 @@ export const getAddressById = async (id: string): Promise<Address | null> => {
   }
 };
 
-export const createAddress = async (address: Omit<Address, 'id' | 'user_id' | 'created_at' | 'updated_at'>): Promise<Address | null> => {
+export const createAddress = async (
+  address: Omit<Address, 'id' | 'user_id' | 'created_at' | 'updated_at'>
+): Promise<Address | null> => {
   try {
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error('คุณยังไม่ได้เข้าสู่ระบบ');
+      return null;
+    }
+
     // If this is set as default, unset other defaults first
     if (address.is_default) {
       await supabase
         .from('addresses')
         .update({ is_default: false })
-        .eq('is_default', true);
+        .eq('is_default', true)
+        .eq('user_id', user.id);
     }
 
     const { data, error } = await supabase
       .from('addresses')
-      .insert([address])
+      .insert([{ ...address, user_id: user.id }])
       .select()
       .single();
 
@@ -92,20 +103,33 @@ export const createAddress = async (address: Omit<Address, 'id' | 'user_id' | 'c
   }
 };
 
-export const updateAddress = async (id: string, updates: Partial<Omit<Address, 'id' | 'user_id' | 'created_at' | 'updated_at'>>): Promise<Address | null> => {
+export const updateAddress = async (
+  id: string, 
+  updates: Partial<Omit<Address, 'id' | 'user_id' | 'created_at' | 'updated_at'>>
+): Promise<Address | null> => {
   try {
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error('คุณยังไม่ได้เข้าสู่ระบบ');
+      return null;
+    }
+
     // If this is set as default, unset other defaults first
     if (updates.is_default) {
       await supabase
         .from('addresses')
         .update({ is_default: false })
-        .eq('is_default', true);
+        .eq('is_default', true)
+        .eq('user_id', user.id);
     }
 
     const { data, error } = await supabase
       .from('addresses')
       .update(updates)
       .eq('id', id)
+      .eq('user_id', user.id)
       .select()
       .single();
 
@@ -148,17 +172,27 @@ export const deleteAddress = async (id: string): Promise<boolean> => {
 
 export const setDefaultAddress = async (id: string): Promise<boolean> => {
   try {
-    // First unset all defaults
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error('คุณยังไม่ได้เข้าสู่ระบบ');
+      return false;
+    }
+    
+    // First unset all defaults for this user
     await supabase
       .from('addresses')
       .update({ is_default: false })
-      .eq('is_default', true);
+      .eq('is_default', true)
+      .eq('user_id', user.id);
     
     // Then set the new default
     const { error } = await supabase
       .from('addresses')
       .update({ is_default: true })
-      .eq('id', id);
+      .eq('id', id)
+      .eq('user_id', user.id);
 
     if (error) {
       toast.error('ไม่สามารถตั้งค่าที่อยู่เริ่มต้นได้', {

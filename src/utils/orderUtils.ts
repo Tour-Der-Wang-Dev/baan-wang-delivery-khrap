@@ -58,6 +58,14 @@ export const createOrder = async (
   deliveryNotes?: string
 ): Promise<Order | null> => {
   try {
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      toast.error('คุณยังไม่ได้เข้าสู่ระบบ');
+      return null;
+    }
+    
     if (!cartItems.length) {
       toast.error('ไม่พบรายการอาหารในตะกร้า');
       return null;
@@ -74,6 +82,7 @@ export const createOrder = async (
       .from('orders')
       .insert([
         {
+          user_id: user.id,
           restaurant_id: restaurantId,
           total_price: totalPrice,
           delivery_address_id: deliveryAddressId,
